@@ -41,8 +41,11 @@ NAMES = (
 
 def get_stat(pid):
     """Get /proc/[pid]/stat contents and repack it into dict"""
-    with open("/proc/" + str(pid) + "/stat", "rt") as fd:
-        return dict(zip(NAMES, fd.readline().split()))
+    try:
+        with open("/proc/" + str(pid) + "/stat", "rt") as fd:
+            return dict(zip(NAMES, fd.readline().split()))
+    except Exception as e:
+        return None
 
 def get_pids():
     """Findout all processes PIDs"""
@@ -51,7 +54,7 @@ def get_pids():
 
 def get_stats(pids):
     """Read stat's of all pids"""
-    return [get_stat(pid) for pid in pids]
+    return filter(lambda x: x is not None, [get_stat(pid) for pid in pids])
 
 def get_childs(pid, stats):
     """Build stats for all childs of the pid"""
@@ -76,7 +79,7 @@ if __name__ == "__main__":
 
     pid = sys.argv[1]
     template = sys.argv[2]
-    for stat in [get_stat(pid)] + get_childs(pid, stats):
+    for stat in list(get_stats([pid])) + get_childs(pid, stats):
         data = {
             "stat": stat,
             "system": SYSTEM
