@@ -71,5 +71,6 @@ There are some things that can be substituted:
 There are some modules that already in global scope:
 
   - `datetime`
+  - `time`
   - `os`
   - `sys`
