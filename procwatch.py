@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import datetime
+import time
 
 # /proc/[pid]/stat fields as specified in https://github.com/torvalds/linux/blob/a0c2e07d6d4fe6f67b057d0f1c961e70ff581eda/fs/proc/array.c#L445
 # MAN proc(5) http://man7.org/linux/man-pages/man5/proc.5.html
@@ -83,6 +84,6 @@ if __name__ == "__main__":
         sys.stdout.write(
             str(eval(
                 template.format(**data),
-                {"datetime": datetime, "os": os, "sys": sys}
+                {"datetime": datetime, "os": os, "sys": sys, "time": time}
             )) + "\n"
         )
