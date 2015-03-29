@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     pid = sys.argv[1]
     template = sys.argv[2]
-    for stat in get_childs(int(pid), stats):
+    for stat in [get_stat(pid)] + get_childs(pid, stats):
         data = {
             "stat": stat,
             "system": SYSTEM
