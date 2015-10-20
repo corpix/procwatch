@@ -16,23 +16,25 @@ format_string = sys.argv[2]
 process = psutil.Process(pid=pid)
 
 def children(process, *args, **kwargs):
-
     if psutil.version_info < (2, 0, 0,):
         return process.get_children(*args, **kwargs)
     else:
         return process.children(*args, **kwargs)
 
 for proc in [process] + children(process, recursive=True):
-    sys.stdout.write(
-        str(eval(
-            format_string,
-            {
-                "datetime": datetime,
-                "os": os,
-                "sys": sys,
-                "time": time,
-                "psutil": psutil,
-                "proc": proc,
-            }
-        )) + "\n"
-    )
+    try:
+        sys.stdout.write(
+            str(eval(
+                format_string,
+                {
+                    "datetime": datetime,
+                    "os": os,
+                    "sys": sys,
+                    "time": time,
+                    "psutil": psutil,
+                    "proc": proc,
+                }
+            )) + "\n"
+        )
+    except psutil.NoSuchProcess:
+        pass
